@@ -5,12 +5,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getStripePayments } from "@stripe/firestore-stripe-payments";
 
-// Your new Firebase project configuration.
+// Your Firebase project configuration.
 const firebaseConfig = {
-  apiKey: "AIzaSyDFprvj821zHI-037mpqW51SyLrs6MC85E",
+  apiKey: "AIzaSyDFprvj82lzHI-037mpqW51SyLrs6MC85E",
   authDomain: "mirrornetv2.firebaseapp.com",
   projectId: "mirrornetv2",
-  storageBucket: "mirrornetv2.firebasestorage.app",
+  storageBucket: "mirrornetv2.appspot.com",
   messagingSenderId: "715585417729",
   appId: "1:715585417729:web:19a5b571a86bc181a98600",
   measurementId: "G-LJW6HK1XBP"
