@@ -1,0 +1,17 @@
+{
+  "name": "MirrorNet",
+  "short_name": "MirrorNet",
+  "description": "A self-awareness and personal development tool.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/mirrornet-80185.firebasestorage.app/o/icon_512x512.png?alt=media&token=f34cba2c-9ce8-4845-b088-c5b6c69369c9",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
