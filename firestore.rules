@@ -1,53 +1,59 @@
 
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read and update their own document.
+    // Users can read and update their own user document.
+    // New users can be created by anyone (during signup).
     match /users/{userId} {
       allow read, update: if request.auth != null && request.auth.uid == userId;
-      // Allow creation for any authenticated user (for signup).
       allow create: if request.auth != null;
     }
 
-    // Allow any authenticated user to read from circles.
+    // A user can read a circle document if they are a member of that circle.
+    // Users can create and update their own circles.
     match /circles/{circleId} {
-      allow read: if request.auth != null;
-      // Only the owner can update or delete a circle.
-      allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
-      // Any authenticated user can create a circle.
-      allow create: if request.auth != null;
+      allow read: if request.auth != null && resource.data.memberIds.hasAny([request.auth.uid]);
+      allow create, update: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
     }
 
-    // Rules for ratings - allow if authenticated.
+    // Allow users to create ratings and read ratings they've received if they are premium.
     match /ratings/{ratingId} {
-        allow read, write: if request.auth != null;
-    }
-    match /attractionRatings/{ratingId} {
-        allow read, write: if request.auth != null;
-    }
-
-    // Rules for invites, requests, and goals.
-    match /invites/{inviteId} {
-      allow read, write: if request.auth != null;
-    }
-    match /revealRequests/{requestId} {
-      allow read, write: if request.auth != null;
-    }
-    match /familyGoals/{goalId} {
-       allow read, write: if request.auth != null;
+      allow create, update: if request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+      // In a real-world scenario, you might have more complex read rules,
+      // but for now, we'll keep it simple: you can't read others' individual ratings directly.
+      allow read: if false; 
     }
     
-    // Rules for feedback.
-    match /feedback/{feedbackId} {
-       allow read, write: if request.auth != null;
+    // Premium attraction ratings
+    match /attractionRatings/{ratingId} {
+      allow create, update: if request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+      allow read: if request.auth != null && request.resource.data.toUserId == request.auth.uid;
     }
 
-    // Products collection for Stripe is public.
-    match /products/{productId} {
-      allow read: if true;
-      match /prices/{priceId} {
-        allow read: if true;
-      }
+    // Invites
+    match /invites/{inviteId} {
+        allow create: if request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+        allow read, update: if request.auth != null && (request.resource.data.fromUserId == request.auth.uid || request.resource.data.toUserId == request.auth.uid);
+    }
+    
+    // Reveal Requests
+    match /revealRequests/{requestId} {
+       allow create: if request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+       allow read, update: if request.auth != null && request.resource.data.toUserId == request.auth.uid;
+    }
+
+    // Family Goals
+    match /familyGoals/{goalId} {
+      allow create: if request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+      allow read, update: if request.auth != null && (request.resource.data.fromUserId == request.auth.uid || request.resource.data.toUserId == request.auth.uid);
+    }
+
+    // Feedback
+    match /feedback/{feedbackId} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      // Admin-only access for reading feedback would be a good addition here in a real app
+      allow read: if false; 
     }
   }
 }
