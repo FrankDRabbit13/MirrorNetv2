@@ -70,11 +70,19 @@ export default function SignupPage() {
       router.push("/dashboard");
 
     } catch (error: any) {
-       toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: error.message,
-      });
+        if (error.code === 'auth/email-already-in-use') {
+            toast({
+                variant: "destructive",
+                title: "Email Already Registered",
+                description: "This email is already in use. Please log in instead.",
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error.message,
+            });
+        }
     } finally {
         setIsSubmitting(false);
     }
