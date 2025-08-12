@@ -77,14 +77,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [revealRequestCount, setRevealRequestCount] = useState(0);
   const [goalSuggestionCount, setGoalSuggestionCount] = useState(0);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
+  // No longer need to redirect if user is not logged in.
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.push('/login');
+  //   }
+  // }, [user, loading, router]);
   
+  // Keep notification fetching logic, but it may not be relevant for a guest user.
   useEffect(() => {
-    if (user) {
+    if (user && user.id !== 'guest') {
       const fetchNotifications = async () => {
         const [receivedInvites, revealRequests, familyGoals] = await Promise.all([
             getReceivedInvitesForUser(user.id),
@@ -100,11 +102,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       fetchNotifications();
     }
   }, [user, pathname]); // Re-fetch when user changes or on navigation
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    router.push("/");
-  };
 
   if (loading || !user) {
     // Show a loading spinner while the auth state is being determined.
@@ -335,11 +332,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

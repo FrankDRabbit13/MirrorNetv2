@@ -19,80 +19,33 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 // Hardcoded IDs for admin users
 const ADMIN_USER_IDS = ["DEthL2hZ7tg45xIbq72qZGkVF7B3", "z6vurwBbkchxhMrZtifnUvKYWoD3"];
 
+const guestUser: User = {
+  id: 'guest',
+  displayName: 'Guest User',
+  email: 'guest@example.com',
+  photoUrl: `https://placehold.co/100x100.png?text=G`,
+  isPremium: true, // Provide premium access for guest mode
+};
+
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(guestUser);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    let unsubscribe: Unsubscribe | undefined;
-
-    const unsubscribeAuth = onAuthStateChanged(auth, (fbUser) => {
-      if (unsubscribe) unsubscribe();
-
-      setFirebaseUser(fbUser);
-      if (fbUser) {
-        setLoading(true);
-        const userDocRef = doc(db, 'users', fbUser.uid);
-        
-        unsubscribe = onSnapshot(userDocRef, async (docSnap) => {
-          if (docSnap.exists()) {
-            const userData = { id: docSnap.id, ...docSnap.data() } as User;
-
-            // Grant admin privileges if applicable
-            if (ADMIN_USER_IDS.includes(fbUser.uid) && !userData.isAdmin) {
-              console.log("Granting admin privileges to user:", fbUser.uid);
-              await updateDoc(userDocRef, { isAdmin: true });
-              userData.isAdmin = true; // Optimistic update
-            }
-            
-            checkAndResetTokens(userData); // Check and reset tokens on user load
-            
-            setUser(userData);
-
-          } else {
-            setUser(null);
-          }
-          setLoading(false);
-        }, (error) => {
-          console.error("Error listening to user document:", error);
-          setUser(null);
-          setLoading(false);
-        });
-      } else {
-        setUser(null);
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      unsubscribeAuth();
-      if (unsubscribe) unsubscribe();
-    };
-  }, []);
+  // The original authentication logic is no longer needed for a public app.
+  // We can keep the updateUser function in case you want to add user-specific features later.
 
   const updateUser = async (updatedFields: Partial<Omit<User, 'id' | 'email'>>) => {
-    if (!user || !firebaseUser) {
-        throw new Error("User not authenticated");
+    if (!user) {
+        // In a real app, you might want to prompt the user to sign up here.
+        console.log("Guest user cannot be updated.");
+        return;
     }
-
-    const userDocRef = doc(db, 'users', firebaseUser.uid);
-    const authProfileUpdatePayload: { displayName?: string; photoURL?: string } = {};
-    if (updatedFields.displayName) {
-        authProfileUpdatePayload.displayName = updatedFields.displayName;
-    }
-    if (updatedFields.photoUrl) {
-        authProfileUpdatePayload.photoURL = updatedFields.photoUrl;
-    }
-
-    const promises: Promise<void>[] = [];
-    promises.push(updateDoc(userDocRef, updatedFields));
-
-    if (Object.keys(authProfileUpdatePayload).length > 0) {
-        promises.push(updateProfile(firebaseUser, authProfileUpdatePayload));
-    }
-    
-    await Promise.all(promises);
+    // This function would need to be adapted if you want guests to save preferences,
+    // for example, by using localStorage.
+    setUser(prevUser => ({...prevUser!, ...updatedFields}));
+    return Promise.resolve();
   };
 
   const value = { user, firebaseUser, updateUser, loading };

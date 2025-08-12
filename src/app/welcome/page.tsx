@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -109,10 +110,7 @@ export default function OnboardingPage() {
        <div className="absolute bottom-6 w-full max-w-md px-4 z-10">
             <div className="flex flex-col sm:flex-row gap-2">
                 <Button asChild className="w-full">
-                    <Link href="/signup">Get Started</Link>
-                </Button>
-                <Button asChild variant="secondary" className="w-full">
-                    <Link href="/login">Login</Link>
+                    <Link href="/dashboard">Explore the App</Link>
                 </Button>
             </div>
        </div>
