@@ -7,13 +7,13 @@ import { getStripePayments } from "@stripe/firestore-stripe-payments";
 
 // Your new Firebase project configuration.
 const firebaseConfig = {
-  apiKey: "AIzaSyDFprvj82lzHI-037mpqW51SyLrs6MC85E",
-  authDomain: "mirrornetv2.firebaseapp.com",
-  projectId: "mirrornetv2",
-  storageBucket: "mirrornetv2.firebasestorage.app",
-  messagingSenderId: "715585417729",
-  appId: "1:715585417729:web:19a5b571a86bc181a98600",
-  measurementId: "G-LJW6HK1XBP"
+  apiKey: "API_KEY",
+  authDomain: "mirrornet-80185.firebaseapp.com",
+  projectId: "mirrornet-80185",
+  storageBucket: "mirrornet-80185.appspot.com",
+  messagingSenderId: "183315681766",
+  appId: "1:183315681766:web:c618b76a26c51883395011",
+  measurementId: "G-19928E223Y"
 };
 
 // A more robust way to initialize Firebase, especially for server-side code.
