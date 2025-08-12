@@ -129,7 +129,7 @@ export default function LoginPage() {
       <Card className="mx-auto max-w-sm w-full">
         <CardHeader className="text-center">
           <Link href="/" className="inline-flex justify-center items-center gap-2 mb-4">
-            <Image src="https://firebasestorage.googleapis.com/v0/b/mirrornet-96cce.appspot.com/o/MirrorNet%20logo.png?alt=media&token=5fcd3e2f-42a6-46ed-8093-44b0489ba1fd" alt="MirrorNet™ Logo" width={32} height={32} className="w-8 h-8" />
+            <Image src="https://firebasestorage.googleapis.com/v0/b/mirrornet-96cce.appspot.com/o/MirrorNet%20logo.png?alt=media&token=5fcd3e2f-42a6-46ed-8093-44b0489ba1fd" alt="MirrorNet™ Logo" width={32} height={32} />
              <span className="text-2xl font-bold font-headline text-primary">MirrorNet™</span>
           </Link>
           <CardTitle className="text-2xl font-headline">Welcome Back</CardTitle>
