@@ -7,7 +7,7 @@ import { getStripePayments } from "@stripe/firestore-stripe-payments";
 
 // Your new Firebase project configuration.
 const firebaseConfig = {
-  apiKey: "API_KEY",
+  apiKey: "REDACTED",
   authDomain: "mirrornet-80185.firebaseapp.com",
   projectId: "mirrornet-80185",
   storageBucket: "mirrornet-80185.appspot.com",
