@@ -107,7 +107,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   if (loading || !user) {
-    // You can show a loading spinner here
+    // Show a loading spinner while the auth state is being determined.
     return (
         <div className="w-full h-screen flex items-center justify-center">
             <LoaderCircle className="w-10 h-10 text-primary animate-spin" />

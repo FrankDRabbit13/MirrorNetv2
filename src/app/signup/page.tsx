@@ -63,11 +63,11 @@ export default function SignupPage() {
       
       await updateProfile(fbUser, { displayName });
       
-      // 2. Create user data in Firestore. The Cloud Function will handle Stripe.
+      // 2. Create user data in Firestore.
       await createNewUserData(fbUser, { firstName, lastName });
 
       toast({ title: "Account Created!", description: "Welcome to MirrorNet™. Redirecting..." });
-      router.push("/dashboard");
+      // The redirect will be handled by the global state change in useUser
 
     } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
@@ -97,12 +97,11 @@ export default function SignupPage() {
         const userDoc = await getDoc(userDocRef);
 
         if (!userDoc.exists()) {
-             // 2. Create user data in Firestore. The Cloud Function will handle Stripe.
              await createNewUserData(fbUser);
              toast({ title: "Account Created!", description: "Welcome to MirrorNet™." });
         }
         
-        router.push("/dashboard");
+       // The redirect will be handled by the global state change in useUser
 
     } catch (error: any) {
         toast({
